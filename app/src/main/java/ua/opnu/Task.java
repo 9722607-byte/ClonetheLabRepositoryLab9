@@ -78,76 +78,50 @@ public class Task {
     }
 
     // ЗАВДАННЯ 7: reorder()
-    public static void reorder(Queue<Integer> q) {
-        if (q == null || q.isEmpty()) return;
-        Deque<Integer> stack = new ArrayDeque<>();
-        int size = q.size();
-        int negativeCount = 0;
-
-
+    public void reorder(Queue<Integer> queue) {
+        if (queue == null || queue.isEmpty()) return;
+        Queue<Integer> negatives = new LinkedList<>();
+        Queue<Integer> positives = new LinkedList<>();
+        
+        int size = queue.size();
         for (int i = 0; i < size; i++) {
-            int n = q.poll();
+            int n = queue.poll();
             if (n < 0) {
-                stack.push(n);
-                negativeCount++;
+                negatives.add(n);
             } else {
-                q.add(n);
+                positives.add(n);
             }
         }
-
-        while (!stack.isEmpty()) {
-            q.add(stack.pop());
+        
+        while (!negatives.isEmpty()) {
+            queue.add(negatives.poll());
         }
-
-
-        size = q.size();
-        for (int i = 0; i < size; i++) {
-            stack.push(q.poll());
-        }
-
-        while (!stack.isEmpty()) {
-            q.add(stack.pop());
-        }
-
-        int positiveCount = size - negativeCount;
-        for (int i = 0; i < positiveCount; i++) {
-
+        while (!positives.isEmpty()) {
+            queue.add(positives.poll());
         }
     }
-
+    
     // ЗАВДАННЯ 8: rearrange()
-    public static void rearrange(Queue<Integer> q) {
-        if (q == null || q.isEmpty()) return;
-        Deque<Integer> stack = new ArrayDeque<>();
-        int size = q.size();
-        int evenCount = 0;
-
+    public void rearrange(Queue<Integer> queue) {
+        if (queue == null || queue.isEmpty()) return;
+        Queue<Integer> evens = new LinkedList<>();
+        Queue<Integer> odds = new LinkedList<>();
+        
+        int size = queue.size();
         for (int i = 0; i < size; i++) {
-            int n = q.poll();
+            int n = queue.poll();
             if (n % 2 == 0) {
-                q.add(n);
-                evenCount++;
+                evens.add(n);
             } else {
-                stack.push(n);
+                odds.add(n);
             }
         }
-
-        while (!stack.isEmpty()) {
-            q.add(stack.pop());
+        
+        while (!evens.isEmpty()) {
+            queue.add(evens.poll());
         }
-
-        for (int i = 0; i < q.size() - evenCount; i++) {
-            q.add(q.poll());
-        }
-
-        for (int i = 0; i < evenCount; i++) {
-            q.add(q.poll());
-        }
-        for (int i = 0; i < q.size() - evenCount; i++) {
-            stack.push(q.poll());
-        }
-        while(!stack.isEmpty()) {
-            q.add(stack.pop());
+        while (!odds.isEmpty()) {
+            queue.add(odds.poll());
         }
     }
 
