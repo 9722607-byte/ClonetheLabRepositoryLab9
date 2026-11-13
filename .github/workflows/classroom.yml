@@ -36,32 +36,45 @@ jobs:
 
       # 1) Compilation
       - name: Compile (skip tests)
-        run: mvn -B -ntp -DskipTests=true clean package
+        run: |
+          cd app
+          mvn -B -ntp -DskipTests=true clean package
 
       # 2) Unit tests
       - name: Run Unit Tests
-        run: mvn -B -ntp test
+        run: |
+          cd app
+          mvn -B -ntp test
 
       # 3) Checkstyle
       - name: Run Checkstyle
-        run: mvn -B -ntp checkstyle:checkstyle || true
+        run: |
+          cd app
+          mvn -B -ntp checkstyle:checkstyle || true
 
       # 4) PMD
       - name: Run PMD
-        run: mvn -B -ntp pmd:check || true
+        run: |
+          cd app
+          mvn -B -ntp pmd:check || true
 
       # 5) SpotBugs
       - name: Run SpotBugs
-        run: mvn -B -ntp com.github.spotbugs:spotbugs-maven-plugin:check || true
+        run: |
+          cd app
+          mvn -B -ntp com.github.spotbugs:spotbugs-maven-plugin:check || true
 
       # 6) Spotless (soft check)
       - name: Verify Code Formatting (Spotless, soft)
-        run: mvn -B -ntp spotless:check || echo "⚠️ Spotless found formatting issues (ignored)"
+        run: |
+          cd app
+          mvn -B -ntp spotless:check || echo "⚠️ Spotless found formatting issues (ignored)"
 
       # ==== ChatGPT: review all files in package ua.opnu ====
       - name: Collect ua.opnu Java files
         id: target
         run: |
+          cd app
           git ls-files | grep -E 'src/.*/ua/opnu/.*\.java$' > java_files_for_review.txt || true
           COUNT=$(wc -l < java_files_for_review.txt | xargs)
           echo "count=$COUNT" >> $GITHUB_OUTPUT
@@ -75,6 +88,7 @@ jobs:
         if: ${{ steps.target.outputs.has_files == 'true' }}
         run: |
           set -e
+          cd app
           mkdir -p chatgpt
           if [ -z "$OPENAI_API_KEY" ]; then
             echo "# ChatGPT Review Report\n\n_Not generated (no key)_" > chatgpt/chatgpt_report.md
@@ -126,9 +140,9 @@ jobs:
       - name: Ensure ChatGPT report exists
         if: always()
         run: |
-          if [ ! -f chatgpt/chatgpt_report.md ]; then
-            mkdir -p chatgpt
-            echo "# ChatGPT Review Report\n\n_Not generated._" > chatgpt/chatgpt_report.md
+          if [ ! -f app/chatgpt/chatgpt_report.md ]; then
+            mkdir -p app/chatgpt
+            echo "# ChatGPT Review Report\n\n_Not generated._" > app/chatgpt/chatgpt_report.md
           fi
 
       # 7) Archive all reports
@@ -137,9 +151,9 @@ jobs:
         with:
           name: reports
           path: |
-            chatgpt/chatgpt_report.md
-            target/checkstyle-result.xml
-            target/site/checkstyle.html
-            target/site/pmd.html
-            target/spotbugsXml.xml
+            **/chatgpt/chatgpt_report.md
+            **/target/checkstyle-result.xml
+            **/target/site/checkstyle.html
+            **/target/site/pmd.html
+            **/target/spotbugsXml.xml
           if-no-files-found: warn
