@@ -80,17 +80,23 @@ public class Task {
     // ЗАВДАННЯ 7: reorder()
     public void reorder(Queue<Integer> queue) {
         if (queue == null || queue.isEmpty()) return;
-        Queue<Integer> negatives = new LinkedList<>();
         Queue<Integer> positives = new LinkedList<>();
+        Stack<Integer> negativesStack = new Stack<>();
         
         int size = queue.size();
         for (int i = 0; i < size; i++) {
             int n = queue.poll();
             if (n < 0) {
-                negatives.add(n);
+                negativesStack.push(n);
             } else {
                 positives.add(n);
             }
+        }
+        
+       
+        Queue<Integer> negatives = new LinkedList<>();
+        while (!negativesStack.isEmpty()) {
+            negatives.add(negativesStack.pop());
         }
         
         while (!negatives.isEmpty()) {
