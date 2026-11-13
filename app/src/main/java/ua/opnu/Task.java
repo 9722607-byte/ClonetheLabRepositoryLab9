@@ -1,85 +1,255 @@
 package ua.opnu;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public class Task {
-    public static void main(String[] args) {
 
+    // ЗАВДАННЯ 1: removeShorterStrings()
+    public static void removeShorterStrings(List<String> list) {
+        for (int i = 0; i < list.size() - 1; i++) {
+            String s1 = list.get(i);
+            String s2 = list.get(i + 1);
+            if (s1.length() < s2.length()) {
+                list.remove(i);
+            } else if (s2.length() < s1.length()) {
+                list.remove(i + 1);
+            } else {
+                list.remove(i);
+            }
+        }
     }
 
-    public void removeShorterStrings(List<String> list) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
+    // ЗАВДАННЯ 2: stutter()
+    public static void stutter(List<String> list) {
+        for (int i = 0; i < list.size(); i += 2) {
+            String s = list.get(i);
+            list.add(i + 1, s);
+        }
     }
 
-    public void stutter(List<String> list) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
+    // ЗАВДАННЯ 3: switchPairs()
+    public static void switchPairs(List<String> list) {
+        for (int i = 0; i < list.size() - 1; i += 2) {
+            String temp = list.get(i);
+            list.set(i, list.get(i + 1));
+            list.set(i + 1, temp);
+        }
     }
 
-    public void switchPairs(List<String> list) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
+    // ЗАВДАННЯ 4: removeDuplicates()
+    public static void removeDuplicates(List<String> list) {
+        for (int i = list.size() - 1; i > 0; i--) {
+            if (list.get(i).equals(list.get(i - 1))) {
+                list.remove(i);
+            }
+        }
     }
 
-    public void removeDuplicates(List<String> list) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
+    // ЗАВДАННЯ 5: markLength4()
+    public static void markLength4(List<String> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).length() == 4) {
+                list.add(i, "****");
+                i++;
+            }
+        }
     }
 
-    public void markLength4(List<String> list) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
+    // ЗАВДАННЯ 6: isPalindrome()
+    public static boolean isPalindrome(Queue<Integer> q) {
+        if (q == null || q.isEmpty()) return true;
+        Deque<Integer> stack = new ArrayDeque<>();
+        int size = q.size();
+
+        for (int i = 0; i < size; i++) {
+            int n = q.poll();
+            stack.push(n);
+            q.add(n);
+        }
+
+        boolean isPal = true;
+        for (int i = 0; i < size; i++) {
+            int n = q.poll();
+            int s = stack.pop();
+            if (n != s) isPal = false;
+            q.add(n);
+        }
+        return isPal;
     }
 
-    public boolean isPalindrome(Queue<Integer> queue) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
-        return false;
+    // ЗАВДАННЯ 7: reorder()
+    public static void reorder(Queue<Integer> q) {
+        if (q == null || q.isEmpty()) return;
+        Deque<Integer> stack = new ArrayDeque<>();
+        int size = q.size();
+        int negativeCount = 0;
+
+
+        for (int i = 0; i < size; i++) {
+            int n = q.poll();
+            if (n < 0) {
+                stack.push(n);
+                negativeCount++;
+            } else {
+                q.add(n);
+            }
+        }
+
+        while (!stack.isEmpty()) {
+            q.add(stack.pop());
+        }
+
+
+        size = q.size();
+        for (int i = 0; i < size; i++) {
+            stack.push(q.poll());
+        }
+
+        while (!stack.isEmpty()) {
+            q.add(stack.pop());
+        }
+
+        int positiveCount = size - negativeCount;
+        for (int i = 0; i < positiveCount; i++) {
+
+        }
     }
 
-    public void reorder(Queue<Integer> queue) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
+    // ЗАВДАННЯ 8: rearrange()
+    public static void rearrange(Queue<Integer> q) {
+        if (q == null || q.isEmpty()) return;
+        Deque<Integer> stack = new ArrayDeque<>();
+        int size = q.size();
+        int evenCount = 0;
+
+        for (int i = 0; i < size; i++) {
+            int n = q.poll();
+            if (n % 2 == 0) {
+                q.add(n);
+                evenCount++;
+            } else {
+                stack.push(n);
+            }
+        }
+
+        while (!stack.isEmpty()) {
+            q.add(stack.pop());
+        }
+
+        for (int i = 0; i < q.size() - evenCount; i++) {
+            q.add(q.poll());
+        }
+
+        for (int i = 0; i < evenCount; i++) {
+            q.add(q.poll());
+        }
+        for (int i = 0; i < q.size() - evenCount; i++) {
+            stack.push(q.poll());
+        }
+        while(!stack.isEmpty()) {
+            q.add(stack.pop());
+        }
     }
 
-    public void rearrange(Queue<Integer> queue) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
+    // ЗАВДАННЯ 9: maxLength()
+    public static int maxLength(Set<String> set) {
+        if (set == null || set.isEmpty()) return 0;
+        int max = 0;
+        for (String s : set) {
+            if (s.length() > max) max = s.length();
+        }
+        return max;
     }
 
-    public int maxLength(Set<String> set) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
-        return 0;
+    // ЗАВДАННЯ 10: removeEvenLength()
+    public static void removeEvenLength(Set<String> set) {
+        if (set != null) {
+            set.removeIf(s -> s.length() % 2 == 0);
+        }
     }
 
-    public void removeEvenLength(Set<String> set) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
+    // ЗАВДАННЯ 11: numInCommon()
+    public static int numInCommon(List<Integer> list1, List<Integer> list2) {
+        Set<Integer> set1 = new HashSet<>(list1);
+        Set<Integer> set2 = new HashSet<>(list2);
+        set1.retainAll(set2);
+        return set1.size();
     }
 
-    public int numInCommon(List<Integer> list1, List<Integer> list2) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
-        return 0;
+    // ЗАВДАННЯ 12: isUnique()
+    public static boolean isUnique(Map<String, String> map) {
+        if (map == null || map.isEmpty()) return true;
+        Collection<String> values = map.values();
+        Set<String> uniqueValues = new HashSet<>(values);
+        return values.size() == uniqueValues.size();
     }
 
-    public boolean isUnique(Map<String, String> map) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
-        return false;
+    // ЗАВДАННЯ 13: intersect()
+    public static Map<String, Integer> intersect(Map<String, Integer> map1, Map<String, Integer> map2) {
+        Map<String, Integer> result = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : map1.entrySet()) {
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+            if (map2.containsKey(key) && map2.get(key).equals(value)) {
+                result.put(key, value);
+            }
+        }
+        return result;
     }
 
-    public Map<String, Integer> intersect(Map<String, Integer> map1, Map<String, Integer> map2) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
-        return null;
+    // ЗАВДАННЯ 14: reverse()
+    public static Map<String, Integer> reverse(Map<Integer, String> map) {
+        Map<String, Integer> result = new HashMap<>();
+        for (Map.Entry<Integer, String> entry : map.entrySet()) {
+            result.put(entry.getValue(), entry.getKey());
+        }
+        return result;
     }
 
-    public Map<String, Integer> reverse(Map<Integer, String> map) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
-        return null;
+    // ЗАВДАННЯ 15: rarest()
+    public static int rarest(Map<String, Integer> map) {
+        if (map == null || map.isEmpty()) {
+            throw new IllegalArgumentException("Map is empty");
+        }
+
+        Map<Integer, Integer> countMap = new HashMap<>();
+        for (int val : map.values()) {
+            countMap.put(val, countMap.getOrDefault(val, 0) + 1);
+        }
+
+        int minFrequency = Integer.MAX_VALUE;
+        int rarestVal = Integer.MAX_VALUE;
+
+        for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
+            int val = entry.getKey();
+            int freq = entry.getValue();
+
+            if (freq < minFrequency) {
+                minFrequency = freq;
+                rarestVal = val;
+            } else if (freq == minFrequency) {
+                if (val < rarestVal) {
+                    rarestVal = val;
+                }
+            }
+        }
+        return rarestVal;
     }
 
-    public int rarest(Map<String, Integer> map) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
-        return 0;
-    }
+    // ЗАВДАННЯ 16: maxOccurrences()
+    public static int maxOccurrences(List<Integer> list) {
+        if (list == null || list.isEmpty()) return 0;
 
-    public int maxOccurrences(List<Integer> list) {
-        // TODO: напишіть вміст методу згідно умовам для того, щоб пройти тести
-        return 0;
-    }
+        Map<Integer, Integer> counts = new HashMap<>();
+        int max = 0;
 
+        for (int n : list) {
+            int count = counts.getOrDefault(n, 0) + 1;
+            counts.put(n, count);
+            if (count > max) {
+                max = count;
+            }
+        }
+        return max;
+    }
 }
